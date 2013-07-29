@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+    <title>XTabs Events</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.js"></script>
+    <script type="text/javascript" src="../node_modules/nommon/lib/no.base.js"></script>
+    <script type="text/javascript" src="../node_modules/nommon/lib/no.events.js"></script>
+    <script type="text/javascript" src="../no.xtabs.js"></script>
+</head>
+
+<body>
+
+<div id="my-id"></div>
+<div id="ids"></div>
+
+<script>
+
+var id = ( +localStorage.getItem('id') ) + 1;
+localStorage.setItem('id', id);
+
+$('#my-id').text('My Id: ' + id);
+
+var ids = [];
+
+no.xtabs.on('ping', function(e) {
+    no.xtabs.trigger('pong', id);
+});
+
+no.xtabs.on('pong', function(e, id) {
+    ids.push(id);
+});
+
+no.xtabs.trigger('ping');
+
+setTimeout(function() {
+    $('#ids').text( 'Found tabs: ' + ids.join(' ') );
+}, 100);
+
+</script>
+
+</body>
+</html>
+
